@@ -11,19 +11,29 @@ html,body{margin:0;padding:0;width:100%;height:100%;background:#0f0d0a;overflow:
 #stage{position:absolute;left:50%;top:50%;width:min(100vw,56.25vh);height:min(177.78vw,100vh);transform:translate(-50%,-50%);background:#000}
 @supports (height:100dvh){#stage{width:min(100vw,56.25dvh);height:min(177.78vw,100dvh)}}
 video{position:absolute;left:0;top:0;width:100%;height:100%;object-fit:cover;display:block;background:#000}
-#loc{position:absolute;z-index:5;left:50%;bottom:9%;transform:translateX(-50%);display:flex;align-items:center;gap:.55em;padding:.8em 1.5em;border-radius:999px;text-decoration:none;
+#loc{position:absolute;z-index:5;left:50%;bottom:7%;transform:translateX(-50%);display:flex;align-items:center;gap:.55em;padding:.8em 1.5em;border-radius:999px;text-decoration:none;
  font:600 clamp(12px,3.7vw,17px)/1 Georgia,"Times New Roman",serif;letter-spacing:.14em;text-transform:uppercase;color:#3b2a10;white-space:nowrap;
  background:linear-gradient(135deg,#f3dc9c,#c9a24f 55%,#a67c2e);box-shadow:0 6px 22px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.55);
  opacity:0;animation:in 1.2s ease 11s forwards;-webkit-tap-highlight-color:transparent}
+#tap{position:absolute;left:50%;top:50%;width:84px;height:84px;margin:-42px 0 0 -42px;border-radius:50%;background:rgba(15,13,10,.55);display:none;align-items:center;justify-content:center;z-index:4;cursor:pointer}
+#tap svg{width:38px;height:38px;fill:#f3dc9c;margin-left:5px}
 #loc.show{animation:in 1s ease 0s forwards}
 #loc svg{width:1.25em;height:1.25em;flex:none}
 @keyframes in{from{opacity:0;transform:translate(-50%,12px)}to{opacity:1;transform:translate(-50%,0)}}
 @-webkit-keyframes in{from{opacity:0;-webkit-transform:translate(-50%,12px)}to{opacity:1;-webkit-transform:translate(-50%,0)}}
 </style></head><body>
 <div id="stage">
-<video src="invite.mp4" poster="poster.jpg" autoplay muted playsinline controls controlslist="nodownload" preload="auto"></video>
+<video src="invite.mp4" poster="poster.jpg" autoplay muted playsinline disablepictureinpicture disableremoteplayback preload="auto"></video>
+<div id="tap"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div>
 <a id="loc" href="https://maps.app.goo.gl/rT2LsmVyEpmhjxgP8?g_st=aw" target="_blank" rel="noopener">
 <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>View Location</a>
 </div>
-<script>(function(){var v=document.querySelector('video'),b=document.getElementById('loc');function s(){b.className='show'}v.addEventListener('timeupdate',function(){if(v.currentTime>=8.4)s()});v.addEventListener('ended',s)})();</script>
+<script>(function(){var v=document.querySelector('video'),b=document.getElementById('loc'),t=document.getElementById('tap'),st=document.getElementById('stage');
+function show(){b.className='show'}
+v.addEventListener('timeupdate',function(){if(v.currentTime>=8.4)show()});v.addEventListener('ended',show);
+v.addEventListener('playing',function(){t.style.display='none'});
+function need(){if(v.paused&&!v.ended)t.style.display='flex'}
+var p=v.play();if(p&&p.catch)p.catch(need);setTimeout(need,1500);
+st.addEventListener('click',function(e){if(b.contains(e.target))return;if(v.ended){v.currentTime=0}v.play()});
+})();</script>
 </body></html>
